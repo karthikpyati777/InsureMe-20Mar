@@ -9,7 +9,7 @@ pipeline {
     stage('CheckOut') {
       steps {
         echo 'Checkout the source code from GitHub'
-        git branch: 'main', url: 'https://github.com/devopscbabu/InsureProject-Dec3Batch.git'
+        git branch: 'main', url: 'https://github.com/karthikpyati777/InsureMe-20Mar.git'
             }
     }
     
@@ -28,27 +28,10 @@ pipeline {
     
     stage('Docker Image Creation') {
       steps {
-        sh 'docker build -t cbabu85/insureprojectdec3:latest .'
-            }
-    }
-    stage('DockerLogin') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'Docker-Hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-}
+        sh 'docker build -t karthik854/insureprojectdec3:latest .'
             }
     }
 
-    stage('Push Image to DockerHub') {
-      steps {
-        sh 'docker push cbabu85/insureprojectdec3:latest'
-            }
-    }
-    stage('Deploy Application using Ansible') {
-      steps {
-        ansiblePlaybook credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'deploy.yml'
-            }
-    }
 
   }
 }

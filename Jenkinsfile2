@@ -46,13 +46,25 @@ pipeline {
             }
     }
 
-     stage('Deploy docker using ansible') {
-      steps {
-       ansiblePlaybook credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'Ansible2', inventory: '/etc/ansible/hosts', playbook: 'deploy.yml', vaultTmpPath: ''
+    // stage('Deploy docker using ansible') {
+      //steps {
+      // ansiblePlaybook credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'Ansible2', inventory: '/etc/ansible/hosts', playbook: 'deploy.yml', vaultTmpPath: ''
+        //    }
+    //}
+
+
+stage('Deploy to Dev') {
+            steps {
+                ansiblePlaybook playbook: 'deploy_app.yml', inventory: '/etc/ansible/hosts', tags: 'dev'
             }
-    }
+        }
 
-
+stage('Deploy to Prod') {
+            steps {
+                input message: 'Proceed to Prod Deployment?'
+                ansiblePlaybook playbook: 'deploy_app.yml', inventory: '/etc/ansible/hosts', tags: 'prod'
+            }
+        }
 
   }
 }

@@ -55,14 +55,14 @@ pipeline {
 
 stage('Deploy to Dev') {
             steps {
-                ansiblePlaybook playbook: 'deploy_app.yml', inventory: '/etc/ansible/hosts', tags: 'dev'
+                ansiblePlaybook playbook: 'deploy.yml', inventory: '/etc/ansible/hosts', tags: 'dev'
             }
         }
 
 stage('Deploy to Prod') {
             steps {
                 input message: 'Proceed to Prod Deployment?'
-                ansiblePlaybook playbook: 'deploy_app.yml', inventory: '/etc/ansible/hosts', tags: 'prod'
+                ansiblePlaybook playbook: 'deploy.yml', inventory: '/etc/ansible/hosts', tags: 'prod'
             }
         }
 

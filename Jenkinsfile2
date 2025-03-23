@@ -46,11 +46,7 @@ pipeline {
             }
     }
 
-    stage('Deploy docker using ansible') {
-      steps {
-       ansiblePlaybook credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'Ansible2', inventory: '/etc/ansible/hosts', playbook: 'deploy.yml', vaultTmpPath: ''
-            }
-    }
+    
 
 
 

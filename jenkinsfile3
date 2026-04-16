@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = 'karthik854/insureprojectdec7:latest'
+        IMAGE_NAME = 'karthik854/insureprojectapr16:latest'
         CONTAINER_NAME = 'insure-container'
     }
 

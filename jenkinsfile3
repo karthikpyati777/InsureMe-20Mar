@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'maven3'
+    }
+
+    environment {
+        IMAGE_NAME = 'karthik854/insureprojectdec7:latest'
+        CONTAINER_NAME = 'insure-container'
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                echo 'Checkout the source code from GitHub'
+                git branch: 'main', url: 'https://github.com/karthikpyati777/InsureMe-20Mar.git'
+            }
+        }
+
+        stage('Build Application') {
+            steps {
+                echo 'Packaging the Application'
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME} ."
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockeruserid', usernameVariable: 'dockerhubuser', passwordVariable: 'dockerhubpass')]) {
+                    sh 'echo $dockerhubpass | docker login -u $dockerhubuser --password-stdin'
+                }
+            }
+        }
+
+        stage('Push Image to DockerHub') {
+            steps {
+                sh "docker push ${IMAGE_NAME}"
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                sh """
+                docker rm -f ${CONTAINER_NAME} || true
+                docker run -d -p 8082:8081 --name ${CONTAINER_NAME} ${IMAGE_NAME}
+                """
+            }
+        }
+    }
+}
